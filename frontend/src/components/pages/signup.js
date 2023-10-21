@@ -70,7 +70,7 @@ function Signup() {
           ...prevState,
           type: 'error',
           label: 'Error!',
-          message: err
+          message: err.message
         }))
       })
   };

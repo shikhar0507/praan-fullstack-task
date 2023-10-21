@@ -28,6 +28,7 @@ const userReducer = (state, action) => {
 };
 
 const UserProvider = ({ children }) => {
+  console.log(children)
   const [state, dispatch] = useReducer(userReducer, initialState);
 
   return (
@@ -39,8 +40,12 @@ const UserProvider = ({ children }) => {
 
 const useUser = () => {
   const context = useContext(UserContext);
+  console.log(context)
   if (!context) {
-    throw new Error('Error');
+    return { state: {
+      user: null,
+      isAuthenticated: false
+    }, dispatch: () => {} };
   }
   return context;
 };

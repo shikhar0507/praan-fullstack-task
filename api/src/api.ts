@@ -16,12 +16,15 @@ import { RedisClientType, RedisDefaultModules } from 'redis';
 // Load the env config
 config({path:"../env"})
 export const app = express();
-app.use(cors({
-    origin: "*",
-    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
-    allowedHeaders: 'Content-Type, Authorization, x_authorization_token',
-    credentials: true,
-}))
+
+app.all("*",function(req, res, next) {
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Methods", "GET, PUT, POST,DELETE,OPTIONS");
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization, x_authorization_token");
+    next();
+});
+app.use(cors())
+
 app.use(express.json({limit: '50mb'}));
 app.use('/device',authorizeMiddleware)
 app.use('/admin',authorizeMiddleware)
