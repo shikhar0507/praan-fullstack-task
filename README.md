@@ -2,7 +2,8 @@
 Mircoservice architecture with frontend for designing the praan platform.
 
 # Sytem Architecture
-![Sytem Architecture](./docs/architecture.png)
+![Sytem Architecture](https://i.imgur.com/NjGmiNZ.png)
+
 
 ## Overview
 This projects is build using docker-compose for simplicity where multiple microservices and API servers work together to process large quantities of incomign data. It consists of following:
