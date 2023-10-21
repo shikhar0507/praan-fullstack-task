@@ -14,7 +14,7 @@ export  const authorizeMiddleware = async (req: Request ,res: Response,next: Nex
         return res.status(400).json({ message: 'Missing authorization header' });
     }
 
-    token = token.replace('Bearer ','');
+    token = token.split(' ')[1]
     const isValidToken = verifyJWT(token)
     if(!isValidToken) {
         return res.status(401).json({ message: 'Unauthorized' });
