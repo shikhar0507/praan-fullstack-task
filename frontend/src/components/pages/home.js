@@ -37,7 +37,7 @@ function Home() {
             return res.json()
         }).then(response => {
             const result = response["result"]
-            if(response.status === 401) {
+            if(response.message === "Unauthorized") {
                 localStorage.removeItem('token');
                 dispatch({ type: 'LOGOUT', payload: "" })
                 navigate("/login")
@@ -95,7 +95,7 @@ function Home() {
             return res.json()
         }).then(response => {
             const result = response["result"]
-            if(response.status === 401) {
+            if(response.message === "Unauthorized") {
                 localStorage.removeItem('token');
                 dispatch({ type: 'LOGOUT', payload: "" })
                 navigate("/login")
