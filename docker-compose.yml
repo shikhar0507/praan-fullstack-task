@@ -1,0 +1,130 @@
+version: '3'
+services:
+  rabbitmq:
+    image: "rabbitmq:management"
+    ports:
+      - "5673:5673"
+      - "15673:15672"
+    networks:
+      - docker_setup_network
+  mongo:
+    image: mongo
+    ports:
+      - "27017:27017"
+    networks:
+      - docker_setup_network
+    environment:
+      - MONGODB_LOG=ERROR
+    
+  redis:
+    image: redis
+    ports:
+      - "6379:6379"
+    networks:
+      - docker_setup_network
+
+  api_1:
+    build:
+      context: ./api
+    expose:
+      - "3000"
+    networks:
+      - docker_setup_network
+    environment:
+      - MONGO_URI=mongodb://mongo:27017/praan
+      - REDIS_URL=redis://redis:6379
+    env_file:
+      - ./api/.env
+    depends_on:
+      - mongo
+      - redis
+  api_2:
+    build:
+      context: ./api
+    expose:
+      - "3000"
+    networks:
+      - docker_setup_network
+    environment:
+      - MONGO_URI=mongodb://mongo:27017/praan
+      - REDIS_URL=redis://redis:6379
+    env_file:
+      - ./api/.env
+    depends_on:
+      - mongo
+      - redis
+  nginx:
+    image: nginx
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf
+    ports:
+      - "80:80"
+    networks:
+      - docker_setup_network
+    build:
+      context: ./nginx
+    depends_on:
+      - api_1
+      - api_2
+    links:
+      - api_1
+      - api_2
+
+
+  consumer1:
+    build:
+      context: ./consumer
+    depends_on:
+      - rabbitmq
+      - nginx
+      - api_1
+      - api_2
+    networks:
+      - docker_setup_network
+    environment:
+      - rabbitmq_connect=rabbitmq
+      - api_port=80
+      - service_name=nginx
+    env_file:
+      - ./consumer/.env
+
+  consumer2:
+    build:
+      context: ./consumer
+    depends_on:
+      - rabbitmq
+      - nginx
+      - api_1
+      - api_2
+    networks:
+      - docker_setup_network
+    environment:
+      - rabbitmq_connect=rabbitmq
+      - api_port=80
+      - service_name=nginx
+    env_file:
+      - ./consumer/.env
+  producer:
+    build:
+      context: ./producer
+    depends_on:
+      - rabbitmq
+      - consumer1
+      - consumer2
+    networks:
+      - docker_setup_network
+    environment:
+      - rabbitmq_connect=rabbitmq
+  node-cron:
+    build:
+      context: ./cron
+    depends_on:
+      - mongo
+    environment:
+      - MONGO_URI=mongodb://mongo:27017/praan
+    networks:
+      - docker_setup_network
+networks:
+  docker_setup_network:
+    driver: bridge
+
