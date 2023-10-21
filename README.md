@@ -2,7 +2,7 @@
 Mircoservice architecture with frontend for designing the praan platform.
 
 # Sytem Architecture
-![Sytem Architecture](./architecture.png)
+![Sytem Architecture](./docs/architecture.png)
 
 ## Overview
 This projects is build using docker-compose for simplicity where multiple microservices and API servers work together to process large quantities of incomign data. It consists of following:
@@ -61,7 +61,7 @@ This speeds up the data retrival for same date-range requests
 
 # Authorization and User management
 
-![Authorization](./authorization.png)
+![Authorization](./docs/authorization.png)
 
 ## Roles
 1. `user`: Default role for user created via the system
