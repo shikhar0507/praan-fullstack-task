@@ -62,7 +62,7 @@ This speeds up the data retrival for same date-range requests
 
 # Authorization and User management
 
-![Authorization](./docs/authorization.png)
+![Authorization](https://i.imgur.com/GF5srEq.png)
 
 ## Roles
 1. `user`: Default role for user created via the system
